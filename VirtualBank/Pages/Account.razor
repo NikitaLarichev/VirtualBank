@@ -1,0 +1,43 @@
+﻿@page "/account"
+@using VirtualBank.Models
+@using VirtualBank.Services
+@inject CardService cardService
+@inject NavigationManager navigation;
+
+<AuthorizeView>
+	<h3>@context.User.Identity.Name</h3>
+</AuthorizeView>
+	<EditForm Model="@newCard" OnValidSubmit="async () => await CardCreate()">
+		<button type="submit">Новая карта</button>
+	</EditForm>
+	<h2>Ваши карты:</h2>
+	@{
+		foreach(var e in cards)
+		{
+			<div style="border-radius: 10px; height: 100px; width: 200px; background-color: lightblue; margin: 5px; padding:10px">
+			<h5>Id:@e.Id</h5>
+			<div style="font-size: large; text-align: center">@e.Money rub.</div>
+			</div>
+		}
+	}
+
+
+@code {
+	[CascadingParameter] Task<AuthenticationState> auth{ get; set; }
+	Card newCard = new Card();
+	List<Card> cards = new List<Card>();
+	string email;
+
+	protected override async Task OnInitializedAsync()
+	{
+		var authState = await auth;
+		email = authState.User.Claims.Where(c => c.Type.Contains("emailaddress")).FirstOrDefault().Value.ToString();
+		cards = await cardService.GetCards(email);
+	}
+	private async Task CardCreate()
+	{
+		newCard = new Card() { Money = 0, OwnerEmail = email };
+		if (await cardService.AddCard(newCard))
+			cards = await cardService.GetCards(email);
+	}
+}

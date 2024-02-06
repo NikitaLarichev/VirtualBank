@@ -1,0 +1,23 @@
+﻿@inherits LayoutComponentBase
+
+<PageTitle>VirtualBank</PageTitle>
+
+<div class="page">
+    <main>
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <div>@context.User.Identity.Name</div>
+                    <a href="Identity/Account/Logout">Log out</a>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="Identity/Account/Register">Registration</a>
+                    <a href="Identity/Account/Login">Log in</a>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

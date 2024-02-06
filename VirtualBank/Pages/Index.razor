@@ -1,0 +1,20 @@
+﻿@page "/"
+@using VirtualBank.Models;
+@using VirtualBank.Services;
+@inject IUser Users;
+@inject NavigationManager navigation;
+
+<PageTitle>Index</PageTitle>
+
+<AuthorizeView>
+	<Authorized>	
+		<a class="nav-link btn btn-link" href="/account">Личный кабинет</a>
+	</Authorized>
+	<NotAuthorized>
+		<div>Личный кабинет доступен только авторизированным пользователям!</div>
+	</NotAuthorized>
+</AuthorizeView>
+@code{
+
+
+}
